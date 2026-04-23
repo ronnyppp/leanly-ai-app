@@ -10,11 +10,11 @@ Go to [Firebase Console\(https://console.firebase.google.com)
 
 Create a project
 
-Register Android App (use talkie-ai-app as name)
+Register Android App (use com.example.talkieai for package name)
 
 Download google-services.json
 
-Place is inside of app folder
+Place it inside of app folder
 
 cd talkie-ai-app
 
