@@ -14,6 +14,14 @@ Register Android App (use com.example.talkieai for package name)
 
 Download google-services.json
 
+Go to AI Services then AI Logic
+
+Click get started and choose Gemini Developer API
+
+Enable API
+
+Add Firebase AI Logic SDK
+
 Place it inside of app folder
 
 cd talkie-ai-app
