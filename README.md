@@ -4,6 +4,8 @@
 
 git clone https://github.com/ronnyppp/talkie-ai-app.git
 
+cd talkie-ai-app
+
 ## Firebase Setup
 
 Go to [Firebase Console\(https://console.firebase.google.com)
@@ -14,18 +16,16 @@ Register Android App (use com.example.talkieai for package name)
 
 Download google-services.json
 
+Place google-services.json inside of app folder
+
 Go to AI Services then AI Logic
 
 Click get started and choose Gemini Developer API
 
 Enable API
 
-Add Firebase AI Logic SDK
+Follow instructions in Firebase AI Logic to add SDK
 
-Place it inside of app folder
+## Run the app
 
-cd talkie-ai-app
-
-.\gradlew build
-
-Run the app in Android Studio
+Open the cloned repo in Android Studio and run it
