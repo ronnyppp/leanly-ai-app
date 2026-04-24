@@ -1,3 +1,16 @@
+# Talkie AI
+
+A basic chat application built with Kotlin and Jetpack Compose that allows users to message with Gemini AI
+using Firebase AI SDK. The app focuses on simple, real-time chat experience.
+
+## Features
+
+- Chat with Gemini AI in real time
+
+- Built using Jetpack Compose
+
+- Clean and minimal UI
+
 # Running the project
 
 ## Clone the repo
