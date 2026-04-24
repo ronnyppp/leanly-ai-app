@@ -37,7 +37,7 @@ Click get started and choose Gemini Developer API
 
 Enable API
 
-Follow instructions in Firebase AI Logic to add SDK
+Follow instructions in Firebase AI Logic to add SDK (if necesarry)
 
 ## Run the app
 
