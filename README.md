@@ -11,6 +11,12 @@ using Firebase AI SDK. The app focuses on simple, real-time chat experience.
 
 - Clean and minimal UI
 
+## 📸 Images
+<p>
+  <img width="1080" height="2400" alt="Screenshot_20260425_232640" src="https://github.com/user-attachments/assets/90573cad-01f5-44b8-a53b-21f452428069" />
+  <img width="1080" height="2400" alt="Screenshot_20260425_232824" src="https://github.com/user-attachments/assets/71b58f16-0fed-4d8b-af96-3c70439b9b71" />
+</p>
+
 # 🚀 Running the project
 
 ## Clone the repo
