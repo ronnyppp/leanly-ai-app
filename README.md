@@ -41,4 +41,8 @@ Follow instructions in Firebase AI Logic to add SDK (if necesarry)
 
 ## Run the app
 
-Open the cloned repo in Android Studio and run it
+In terminal of IDE:
+
+flutter pub get
+
+flutter run
