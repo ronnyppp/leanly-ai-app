@@ -12,14 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
+    primary = OffWhite,
+    secondary = OfferWhite,
     tertiary = Pink80
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
+    primary = OffWhite,
+    secondary = OfferWhite,
     tertiary = Pink40
 
     /* Other default colors to override
@@ -37,7 +37,8 @@ private val LightColorScheme = lightColorScheme(
 fun TalkieAITheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    // Set to false to use your custom color scheme instead of system dynamic colors
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

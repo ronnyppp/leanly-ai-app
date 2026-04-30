@@ -57,6 +57,9 @@ dependencies {
     // Add the dependency for the Firebase AI Logic library When using the BoM,
     // you don't specify versions in Firebase library dependencies
     implementation("com.google.firebase:firebase-ai")
+    implementation("androidx.core:core-splashscreen:1.0.0")
+    implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.compose.foundation.layout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -37,33 +37,26 @@ import androidx.compose.ui.unit.sp
 import com.example.talkieai.ui.theme.Purple80
 import com.example.talkieai.ui.theme.modelMessageColor
 import com.example.talkieai.ui.theme.userMessageColor
+import com.example.talkieai.widgets.AppHeader
 
 @Composable
-fun ChatPage(modifier: Modifier = Modifier, viewModel: ChatViewModel) {
-    Column(modifier = modifier) {
-        AppHeader()
-        MessageList(modifier = Modifier.weight(1f),
-            messageList = viewModel.messageList)
+fun ChatPage(modifier: Modifier = Modifier,
+             viewModel: ChatViewModel,
+             onBackClick: () -> Unit) {
+    Column(
+        modifier = modifier.fillMaxSize()
+    ) {
+        AppHeader(onBackClick = onBackClick)
+        MessageList(
+            modifier = Modifier
+                .weight(1f)
+                .background(MaterialTheme.colorScheme.secondary),
+            messageList = viewModel.messageList
+        )
         MessageInput(onMessageSend = {
             // send message to view model
             viewModel.sendMessage(it)
         })
-    }
-}
-
-@Composable
-fun AppHeader() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.primary)
-    ) {
-        Text(
-            modifier = Modifier.padding(16.dp),
-            text = "TalkieAI",
-            color = Color.White,
-            fontSize = 22.sp
-        )
     }
 }
 
@@ -73,7 +66,10 @@ fun MessageInput(onMessageSend : (String)-> Unit) {
         mutableStateOf("")
     }
     Row(
-        modifier = Modifier.padding(8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.primary)
+            .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         OutlinedTextField(
@@ -81,7 +77,11 @@ fun MessageInput(onMessageSend : (String)-> Unit) {
             value = message,
             onValueChange = {
                 message = it
-            }
+            },
+            colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.onPrimary,
+                unfocusedContainerColor = MaterialTheme.colorScheme.onPrimary,
+            )
         )
         IconButton(onClick = {
             if(message.isNotEmpty()) {
@@ -92,7 +92,8 @@ fun MessageInput(onMessageSend : (String)-> Unit) {
         }) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.Send,
-                contentDescription = "Send"
+                contentDescription = "Send",
+                tint = Color.Black
             )
         }
     }
@@ -112,7 +113,11 @@ fun MessageList(modifier: Modifier = Modifier, messageList : List<MessageModel>)
                 contentDescription = "q&a icon",
                 tint = Purple80
             )
-            Text("Ask me anything", fontSize = 22.sp)
+            Text(
+                "Ask me anything",
+                fontSize = 22.sp,
+                color = Color.Black
+            )
         }
     }else {
         LazyColumn(

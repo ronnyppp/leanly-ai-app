@@ -32,7 +32,6 @@ class MainActivity : ComponentActivity() {
                     containerColor = MaterialTheme.colorScheme.primary
                 ) {innerPadding ->
                     App(modifier = Modifier.padding(innerPadding), chatViewModel)
-                    //ChatPage(modifier = Modifier.padding(innerPadding), chatViewModel)
                 }
             }
         }
@@ -45,16 +44,13 @@ fun App(modifier: Modifier = Modifier, viewModel: ChatViewModel) {
 
     when (currentScreen) {
         ScreenModel.HOME -> HomePage(
+            modifier = modifier,
             onNavigate = { currentScreen = it }
         )
-        ScreenModel.CHAT -> ChatPage(
-            viewModel = viewModel
-        )
-        ScreenModel.WORKOUT -> ChatPage(
-            viewModel = viewModel
-        )
-        ScreenModel.NUTRITION -> ChatPage(
-            viewModel = viewModel
+        ScreenModel.CHAT, ScreenModel.WORKOUT, ScreenModel.NUTRITION -> ChatPage(
+            modifier = modifier,
+            viewModel = viewModel,
+            onBackClick = { currentScreen = ScreenModel.HOME }
         )
     }
 }

@@ -2,4 +2,16 @@
 <resources>
 
     <style name="Theme.TalkieAI" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.TalkieAI.Splash" parent="Theme.SplashScreen">
+
+        <item name="windowSplashScreenBackground">#F5F3F0</item>
+
+        <!-- Your app icon -->
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/fitness_img</item>
+
+        <item name="windowSplashScreenAnimationDuration">300</item>
+
+        <item name="postSplashScreenTheme">@style/Theme.TalkieAI</item>
+
+    </style>
 </resources>

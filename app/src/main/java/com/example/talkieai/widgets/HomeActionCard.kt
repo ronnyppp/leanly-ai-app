@@ -24,7 +24,7 @@ fun HomeActionCard(
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary
         )
