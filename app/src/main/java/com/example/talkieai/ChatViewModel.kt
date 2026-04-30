@@ -7,10 +7,23 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
 import com.google.firebase.ai.ai
 import com.google.firebase.ai.type.GenerativeBackend
+import com.google.firebase.ai.type.content
 import kotlinx.coroutines.launch
 
 class ChatViewModel : ViewModel() {
+    private val fitnessPrompt = """
+You are a professional fitness coach AI.
 
+You help users with:
+- workout plans
+- nutrition advice
+- fitness motivation
+
+Rules:
+- Always be structured
+- Use bullet points for workouts
+- Ask clarifying questions when needed
+""".trimIndent()
 
     // Initialize the Gemini Developer API backend service
 // Create a `GenerativeModel` instance with a model that supports your use case
@@ -20,7 +33,12 @@ class ChatViewModel : ViewModel() {
     val messageList by lazy {
         mutableStateListOf<MessageModel>()
     }
-    private val chat = model.startChat()
+    private val chat = model.startChat(
+        history = listOf(
+            content(role = "model") { text(fitnessPrompt) }
+        ))
+
+
 
 
     fun sendMessage(question: String) {
@@ -30,8 +48,8 @@ class ChatViewModel : ViewModel() {
                 // show fake typing from model
                 messageList.add(MessageModel("Typing...","model"))
 
-                val userQuestion = chat.sendMessage(question)
-                val reply = userQuestion.text ?: "No response"
+                val response = chat.sendMessage(question)
+                val reply = response.text ?: "No response"
 
                 if(messageList.isNotEmpty()) {
                     messageList.removeAt(messageList.lastIndex)
