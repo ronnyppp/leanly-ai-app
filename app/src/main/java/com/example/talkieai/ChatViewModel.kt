@@ -38,8 +38,16 @@ Rules:
             content(role = "model") { text(fitnessPrompt) }
         ))
 
+    private var initialized = false
 
+    fun initialize(initialPrompt: String) {
+        if(initialized) return
+        initialized = true
 
+        if(initialPrompt.isNotBlank()) {
+            sendMessage(initialPrompt)
+        }
+    }
 
     fun sendMessage(question: String) {
         viewModelScope.launch {
