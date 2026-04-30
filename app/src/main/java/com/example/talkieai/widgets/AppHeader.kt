@@ -25,7 +25,6 @@ fun AppHeader(onBackClick: (() -> Unit)? = null) {
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.primary)
-            .statusBarsPadding()
             .padding(10.dp)
     ) {
         if (onBackClick != null) {
