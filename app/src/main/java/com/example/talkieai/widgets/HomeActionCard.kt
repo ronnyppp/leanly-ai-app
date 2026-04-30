@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -25,7 +26,7 @@ fun HomeActionCard(
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.primary
         )
     ) {
         Column(
@@ -33,6 +34,7 @@ fun HomeActionCard(
         ) {
             Text(
                 text = title,
+                color = Color.Black,
                 style = MaterialTheme.typography.titleMedium
             )
 
