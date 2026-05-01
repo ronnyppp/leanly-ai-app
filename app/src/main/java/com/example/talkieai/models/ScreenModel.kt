@@ -1,8 +1,6 @@
 package com.example.talkieai.models
 
-enum class ScreenModel {
-    HOME,
-    CHAT,
-    WORKOUT,
-    NUTRITION
+sealed class ScreenModel {
+    object HOME : ScreenModel()
+    data class CHAT(val initialPrompt: String = "") : ScreenModel()
 }
