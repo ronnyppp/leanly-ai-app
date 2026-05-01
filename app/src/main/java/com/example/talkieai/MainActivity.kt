@@ -40,16 +40,17 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun App(modifier: Modifier = Modifier, viewModel: ChatViewModel) {
-    var currentScreen by remember { mutableStateOf(ScreenModel.HOME) }
+    var currentScreen by remember { mutableStateOf<ScreenModel>(ScreenModel.HOME) }
 
-    when (currentScreen) {
-        ScreenModel.HOME -> HomePage(
+    when (val screen = currentScreen) {
+        is ScreenModel.HOME -> HomePage(
             modifier = modifier,
             onNavigate = { currentScreen = it }
         )
-        ScreenModel.CHAT, ScreenModel.WORKOUT, ScreenModel.NUTRITION -> ChatPage(
+        is ScreenModel.CHAT -> ChatPage(
             modifier = modifier,
             viewModel = viewModel,
+            initialPrompt = screen.initialPrompt,
             onBackClick = { currentScreen = ScreenModel.HOME }
         )
     }
