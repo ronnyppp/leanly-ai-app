@@ -25,50 +25,49 @@ Rules:
 - Ask clarifying questions when needed
 """.trimIndent()
 
-    // Initialize the Gemini Developer API backend service
-// Create a `GenerativeModel` instance with a model that supports your use case
-    private val model = Firebase.ai(backend = GenerativeBackend.googleAI())
-        .generativeModel("gemini-2.5-flash")
+    private val generativeModel = Firebase.ai(backend = GenerativeBackend.googleAI())
+        .generativeModel(
+            modelName = "gemini-2.5-flash",
+            systemInstruction = content { text(fitnessPrompt) }
+        )
 
-    val messageList by lazy {
-        mutableStateListOf<MessageModel>()
-    }
-    private val chat = model.startChat(
-        history = listOf(
-            content(role = "model") { text(fitnessPrompt) }
-        ))
+    private var chat = generativeModel.startChat()
 
-    private var initialized = false
+    val messageList = mutableStateListOf<MessageModel>()
+    
+    private var lastInitialPrompt: String? = null
 
-    fun initialize(initialPrompt: String) {
-        if(initialized) return
-        initialized = true
-
-        if(initialPrompt.isNotBlank()) {
-            sendMessage(initialPrompt)
-        }
+    fun sendInitialPrompt(prompt: String) {
+        if (prompt.isBlank() || prompt == lastInitialPrompt) return
+        
+        lastInitialPrompt = prompt
+        // Clear previous conversation and restart chat session for a fresh context
+        messageList.clear()
+        chat = generativeModel.startChat()
+        
+        sendMessage(prompt)
     }
 
     fun sendMessage(question: String) {
         viewModelScope.launch {
             try {
                 messageList.add(MessageModel(question, "user"))
-                // show fake typing from model
-                messageList.add(MessageModel("Typing...","model"))
+                // Show typing placeholder
+                messageList.add(MessageModel("Typing...", "model"))
 
                 val response = chat.sendMessage(question)
                 val reply = response.text ?: "No response"
 
-                if(messageList.isNotEmpty()) {
+                if (messageList.isNotEmpty() && messageList.last().message == "Typing...") {
                     messageList.removeAt(messageList.lastIndex)
                 }
 
                 messageList.add(MessageModel(reply, "model"))
             } catch (e: Exception) {
-                if(messageList.isNotEmpty()) {
+                if (messageList.isNotEmpty() && messageList.last().message == "Typing...") {
                     messageList.removeAt(messageList.lastIndex)
                 }
-                messageList.add(MessageModel("Error: "+e.message.toString(),"model"))
+                messageList.add(MessageModel("Error: ${e.localizedMessage}", "model"))
                 Log.e("ChatViewModel", "Error sending message", e)
             }
         }
