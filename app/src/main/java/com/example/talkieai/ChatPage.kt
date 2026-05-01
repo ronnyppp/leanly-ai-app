@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,7 +43,12 @@ import com.example.talkieai.widgets.AppHeader
 @Composable
 fun ChatPage(modifier: Modifier = Modifier,
              viewModel: ChatViewModel,
+             initialPrompt: String = "",
              onBackClick: () -> Unit) {
+    LaunchedEffect(initialPrompt) {
+        if(initialPrompt.isNotBlank())
+            viewModel.sendInitialPrompt(initialPrompt)
+    }
     Column(
         modifier = modifier.fillMaxSize()
     ) {
@@ -61,7 +67,7 @@ fun ChatPage(modifier: Modifier = Modifier,
 }
 
 @Composable
-fun MessageInput(onMessageSend : (String)-> Unit) {
+fun MessageInput(onMessageSend : (String)-> Unit, initialText: String = "") {
     var message by remember {
         mutableStateOf("")
     }
