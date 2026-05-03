@@ -2,7 +2,7 @@ package com.example.talkieai.viewmodels
 
 import android.util.Log
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -15,6 +15,7 @@ import com.google.firebase.ai.ai
 import com.google.firebase.ai.type.GenerativeBackend
 import com.google.firebase.ai.type.content
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class ChatViewModel : ViewModel() {
     private val fitnessPrompt = """
@@ -39,53 +40,102 @@ Rules:
 
     private var chat = generativeModel.startChat()
 
-    val messageList = mutableStateListOf<ChatMessage>()
-
-    private var lastInitialPrompt: String? = null
-
-    var savedChats by mutableStateOf(listOf<ChatConversation>())
+    var chats by mutableStateOf<Map<String, ChatConversation>>(emptyMap())
         private set
 
-    fun saveConversation(title: String, messages: List<ChatMessage>) {
-        val newChat = ChatConversation(
-            title = title,
-            messages = messages
-        )
-        savedChats = savedChats + newChat
-    }
-    fun sendInitialPrompt(prompt: String) {
-        if (prompt.isBlank() || prompt == lastInitialPrompt) return
+    var currChatId by mutableStateOf<String?>(null)
+        private set
 
-        lastInitialPrompt = prompt
-        // Clear previous conversation and restart chat session for a fresh context
-        messageList.clear()
+    // UI state only
+    private val loadingChats = mutableStateMapOf<String, Boolean>()
+
+
+    fun createChat(prompt: String): String {
+        val chatId = UUID.randomUUID().toString()
+
+
+        val newChat = ChatConversation(
+            id = chatId,
+            title = if (prompt.isNotBlank()) prompt.take(40) else "New Chat",
+            messages = emptyList(),
+            timestamp = System.currentTimeMillis()
+        )
+
+        chats = chats + (chatId to newChat)
+        currChatId = chatId
+
+        // reset Gemini session
         chat = generativeModel.startChat()
 
-        sendMessage(prompt)
+        // if prompt exists → send as first message
+        if (prompt.isNotBlank()) {
+            sendMessage(chatId, prompt)
+        }
+
+        return chatId
     }
 
-    fun sendMessage(question: String) {
-        viewModelScope.launch {
-            try {
-                messageList.add(ChatMessage(Role.USER,question, System.currentTimeMillis()))
-                // Show typing placeholder
-                messageList.add(ChatMessage(Role.AI,"Typing...", System.currentTimeMillis()))
+    fun getMessages(chatId: String): List<ChatMessage> {
+        return chats[chatId]?.messages ?: emptyList()
+    }
 
+
+    fun sendMessage(chatId: String, question: String) {
+        viewModelScope.launch {
+
+            val chatConvo = chats[chatId] ?: return@launch
+
+            loadingChats[chatId] = true
+
+            try {
+                // add user message
+                val updated = chatConvo.messages + ChatMessage(
+                    role = Role.USER,
+                    content = question,
+                    timestamp = System.currentTimeMillis()
+                )
+
+                chats = chats + (chatId to chatConvo.copy(messages = updated))
+
+                // AI response
                 val response = chat.sendMessage(question)
                 val reply = response.text ?: "No response"
 
-                if (messageList.isNotEmpty() && messageList.last().content == "Typing...") {
-                    messageList.removeAt(messageList.lastIndex)
-                }
+                val finalMessages = chats[chatId]!!.messages + ChatMessage(
+                    role = Role.AI,
+                    content = reply,
+                    timestamp = System.currentTimeMillis()
+                )
 
-                messageList.add(ChatMessage(Role.AI,reply, System.currentTimeMillis()))
+                chats = chats + (chatId to chats[chatId]!!.copy(messages = finalMessages))
+
             } catch (e: Exception) {
-                if (messageList.isNotEmpty() && messageList.last().content == "Typing...") {
-                    messageList.removeAt(messageList.lastIndex)
-                }
-                messageList.add(ChatMessage(Role.AI,"Error: ${e.localizedMessage}", System.currentTimeMillis()))
+
+                val errorMessages = chats[chatId]!!.messages + ChatMessage(
+                    role = Role.AI,
+                    content = "Error: ${e.localizedMessage}",
+                    timestamp = System.currentTimeMillis()
+                )
+
+                chats = chats + (chatId to chats[chatId]!!.copy(messages = errorMessages))
+
                 Log.e("ChatViewModel", "Error sending message", e)
+
+            } finally {
+                loadingChats[chatId] = false
             }
         }
+    }
+
+    var savedChats by mutableStateOf<List<ChatConversation>>(emptyList())
+        private set
+
+    fun saveConversation(chatId: String) {
+        val chat = chats[chatId] ?: return
+        savedChats = savedChats + chat
+    }
+
+    fun isLoading(chatId: String): Boolean {
+        return loadingChats[chatId] == true
     }
 }
