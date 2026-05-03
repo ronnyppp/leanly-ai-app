@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun AppHeader(onBackClick: (() -> Unit)? = null,
-              onAddWeightClick: (() -> Unit)? = null,
               onSaveChatClick: (() -> Unit)? = null) {
     Box(
         modifier = Modifier
@@ -42,6 +41,7 @@ fun AppHeader(onBackClick: (() -> Unit)? = null,
         }
         if(onSaveChatClick != null) {
             IconButton(
+                modifier = Modifier.align(Alignment.CenterEnd),
                 onClick = onSaveChatClick) {
                 Icon(
                     imageVector = Icons.Default.Save,
@@ -57,15 +57,5 @@ fun AppHeader(onBackClick: (() -> Unit)? = null,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold
         )
-        IconButton(modifier = Modifier.align(Alignment.CenterEnd),
-            onClick = {
-            onAddWeightClick?.invoke()
-        }) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Add Weight",
-                tint = Color.Black
-            )
-        }
     }
 }
