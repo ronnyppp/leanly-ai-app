@@ -22,7 +22,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,13 +45,12 @@ import com.example.talkieai.widgets.AppHeader
 @Composable
 fun ChatPage(modifier: Modifier = Modifier,
              viewModel: ChatViewModel,
-             initialPrompt: String = "",
+             chatId: String,
              onBackClick: () -> Unit,
              onSaveChatClick: () -> Unit) {
-    LaunchedEffect(initialPrompt) {
-        if(initialPrompt.isNotBlank())
-            viewModel.sendInitialPrompt(initialPrompt)
-    }
+    val messages = viewModel.getMessages(chatId)
+
+
     Column(
         modifier = modifier.fillMaxSize()
     ) {
@@ -61,11 +59,12 @@ fun ChatPage(modifier: Modifier = Modifier,
             modifier = Modifier
                 .weight(1f)
                 .background(MaterialTheme.colorScheme.secondary),
-            messageList = viewModel.messageList
+            messageList = messages
         )
+
         MessageInput(onMessageSend = {
-            // send message to view model
-            viewModel.sendMessage(it)
+            message ->
+            viewModel.sendMessage(chatId, message)
         })
     }
 }
@@ -95,7 +94,6 @@ fun MessageInput(onMessageSend : (String)-> Unit, initialText: String = "") {
         )
         IconButton(onClick = {
             if(message.isNotEmpty()) {
-                // save message
                 onMessageSend(message)
                 message = ""
             }
@@ -134,8 +132,8 @@ fun MessageList(modifier: Modifier = Modifier, messageList : List<ChatMessage>) 
             modifier = modifier,
             reverseLayout = true
         ) {
-            items(messageList.reversed()) {
-                MessageRow(messageModel = it)
+            items(messageList.reversed()) { message ->
+                MessageRow(messageModel = message)
             }
         }
     }
@@ -152,13 +150,12 @@ fun MessageRow(messageModel: ChatMessage) {
             modifier = Modifier.fillMaxWidth()
         ) {
             Box(
-                // Align messages left/right according to user/model
                 modifier = Modifier.align(if(isUser) Alignment.BottomEnd else Alignment.BottomStart)
                     .padding(
-                        start = if(isUser) 70.dp else 8.dp,
-                        end = if(isUser) 8.dp else 70.dp,
-                        top = 8.dp,
-                        bottom = 8.dp
+                        start = if(isUser) 70.dp else 10.dp,
+                        end = if(isUser) 10.dp else 70.dp,
+                        top = 10.dp,
+                        bottom = 10.dp
                     )
                     .clip(RoundedCornerShape(48f))
                     .background(if(isUser) userMessageColor else modelMessageColor)
