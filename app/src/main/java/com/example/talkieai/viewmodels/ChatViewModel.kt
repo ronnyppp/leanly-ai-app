@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.talkieai.models.ChatConversation
 import com.example.talkieai.models.ChatMessage
-import com.example.talkieai.models.MessageModel
+import com.example.talkieai.models.Role
 import com.google.firebase.Firebase
 import com.google.firebase.ai.ai
 import com.google.firebase.ai.type.GenerativeBackend
@@ -39,7 +39,7 @@ Rules:
 
     private var chat = generativeModel.startChat()
 
-    val messageList = mutableStateListOf<MessageModel>()
+    val messageList = mutableStateListOf<ChatMessage>()
 
     private var lastInitialPrompt: String? = null
 
@@ -67,23 +67,23 @@ Rules:
     fun sendMessage(question: String) {
         viewModelScope.launch {
             try {
-                messageList.add(MessageModel(question, "user"))
+                messageList.add(ChatMessage(Role.USER,question, System.currentTimeMillis()))
                 // Show typing placeholder
-                messageList.add(MessageModel("Typing...", "model"))
+                messageList.add(ChatMessage(Role.AI,"Typing...", System.currentTimeMillis()))
 
                 val response = chat.sendMessage(question)
                 val reply = response.text ?: "No response"
 
-                if (messageList.isNotEmpty() && messageList.last().message == "Typing...") {
+                if (messageList.isNotEmpty() && messageList.last().content == "Typing...") {
                     messageList.removeAt(messageList.lastIndex)
                 }
 
-                messageList.add(MessageModel(reply, "model"))
+                messageList.add(ChatMessage(Role.AI,reply, System.currentTimeMillis()))
             } catch (e: Exception) {
-                if (messageList.isNotEmpty() && messageList.last().message == "Typing...") {
+                if (messageList.isNotEmpty() && messageList.last().content == "Typing...") {
                     messageList.removeAt(messageList.lastIndex)
                 }
-                messageList.add(MessageModel("Error: ${e.localizedMessage}", "model"))
+                messageList.add(ChatMessage(Role.AI,"Error: ${e.localizedMessage}", System.currentTimeMillis()))
                 Log.e("ChatViewModel", "Error sending message", e)
             }
         }
