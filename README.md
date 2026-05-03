@@ -1,4 +1,4 @@
-# 💬 Talkie AI
+# 💬 Leanly AI
 
 A basic chat application built with Kotlin and Jetpack Compose that allows users to message with Gemini AI
 using Firebase AI SDK. The app focuses on simple, real-time chat experience.
