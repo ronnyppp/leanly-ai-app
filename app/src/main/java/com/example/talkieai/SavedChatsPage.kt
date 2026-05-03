@@ -13,39 +13,47 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.talkieai.models.ChatConversation
 import com.example.talkieai.viewmodels.ChatViewModel
+import com.example.talkieai.widgets.AppHeader
 
 @Composable
-fun SavedChatsScreen(
+fun SavedChatsPage(
     viewModel: ChatViewModel,
+    onBackClick: () -> Unit,
     onChatClick: (ChatConversation) -> Unit
 ) {
 
     val chats = viewModel.savedChats
 
-    if (chats.isEmpty()) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("No saved conversations")
-        }
-        return
-    }
+    Column(modifier = Modifier.fillMaxSize()) {
+        AppHeader(onBackClick = onBackClick)
 
-    LazyColumn {
-        items(chats) { chat ->
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .clickable { onChatClick(chat) }
-            ) {
-                Column(modifier = Modifier.padding(12.dp)) {
-                    Text(chat.title)
-                    Text(
-                        text = chat.messages.lastOrNull()?.content ?: "",
-                        maxLines = 1
-                    )
+        if (chats.isEmpty()) {
+            Box(modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center) {
+                Text("No saved conversations.", color = Color.Black)
+            }
+            return
+        }
+
+        LazyColumn {
+            items(chats) { chat ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .clickable { onChatClick(chat) }
+                ) {
+                    Column(modifier = Modifier.padding(12.dp)) {
+                        Text(chat.title, color = Color.Black)
+                        Text(
+                            text = chat.messages.lastOrNull()?.content ?: "",
+                            maxLines = 1
+                        )
+                    }
                 }
             }
         }
