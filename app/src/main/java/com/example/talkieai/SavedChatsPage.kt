@@ -1,0 +1,53 @@
+package com.example.talkieai
+
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.example.talkieai.models.ChatConversation
+import com.example.talkieai.viewmodels.ChatViewModel
+
+@Composable
+fun SavedChatsScreen(
+    viewModel: ChatViewModel,
+    onChatClick: (ChatConversation) -> Unit
+) {
+
+    val chats = viewModel.savedChats
+
+    if (chats.isEmpty()) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text("No saved conversations")
+        }
+        return
+    }
+
+    LazyColumn {
+        items(chats) { chat ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .clickable { onChatClick(chat) }
+            ) {
+                Column(modifier = Modifier.padding(12.dp)) {
+                    Text(chat.title)
+                    Text(
+                        text = chat.messages.lastOrNull()?.content ?: "",
+                        maxLines = 1
+                    )
+                }
+            }
+        }
+    }
+}
