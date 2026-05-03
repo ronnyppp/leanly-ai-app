@@ -38,13 +38,16 @@ import androidx.compose.ui.unit.sp
 import com.example.talkieai.ui.theme.Purple80
 import com.example.talkieai.ui.theme.modelMessageColor
 import com.example.talkieai.ui.theme.userMessageColor
+import com.example.talkieai.viewmodels.ChatViewModel
+import com.example.talkieai.models.MessageModel
 import com.example.talkieai.widgets.AppHeader
 
 @Composable
 fun ChatPage(modifier: Modifier = Modifier,
              viewModel: ChatViewModel,
              initialPrompt: String = "",
-             onBackClick: () -> Unit) {
+             onBackClick: () -> Unit,
+             onSaveChatClick: () -> Unit) {
     LaunchedEffect(initialPrompt) {
         if(initialPrompt.isNotBlank())
             viewModel.sendInitialPrompt(initialPrompt)
@@ -52,7 +55,7 @@ fun ChatPage(modifier: Modifier = Modifier,
     Column(
         modifier = modifier.fillMaxSize()
     ) {
-        AppHeader(onBackClick = onBackClick)
+        AppHeader(onBackClick = onBackClick, onSaveChatClick = onSaveChatClick)
         MessageList(
             modifier = Modifier
                 .weight(1f)
