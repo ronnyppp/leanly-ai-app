@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -20,7 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun AppHeader(onBackClick: (() -> Unit)? = null) {
+fun AppHeader(onBackClick: (() -> Unit)? = null,
+              onAddWeightClick: (() -> Unit)? = null,
+              onSaveChatClick: (() -> Unit)? = null) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -36,6 +40,16 @@ fun AppHeader(onBackClick: (() -> Unit)? = null) {
                 )
             }
         }
+        if(onSaveChatClick != null) {
+            IconButton(
+                onClick = onSaveChatClick) {
+                Icon(
+                    imageVector = Icons.Default.Save,
+                    contentDescription = "Save Chat",
+                    tint = Color.Black
+                )
+            }
+    }
         Text(
             modifier = Modifier.align(Alignment.Center),
             text = "LeanlyAI",
@@ -43,5 +57,15 @@ fun AppHeader(onBackClick: (() -> Unit)? = null) {
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold
         )
+        IconButton(modifier = Modifier.align(Alignment.CenterEnd),
+            onClick = {
+            onAddWeightClick?.invoke()
+        }) {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = "Add Weight",
+                tint = Color.Black
+            )
+        }
     }
 }
