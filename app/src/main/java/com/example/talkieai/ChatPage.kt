@@ -35,11 +35,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.talkieai.models.ChatMessage
+import com.example.talkieai.models.Role
 import com.example.talkieai.ui.theme.Purple80
 import com.example.talkieai.ui.theme.modelMessageColor
 import com.example.talkieai.ui.theme.userMessageColor
 import com.example.talkieai.viewmodels.ChatViewModel
-import com.example.talkieai.models.MessageModel
 import com.example.talkieai.widgets.AppHeader
 
 @Composable
@@ -109,7 +110,7 @@ fun MessageInput(onMessageSend : (String)-> Unit, initialText: String = "") {
 }
 
 @Composable
-fun MessageList(modifier: Modifier = Modifier, messageList : List<MessageModel>) {
+fun MessageList(modifier: Modifier = Modifier, messageList : List<ChatMessage>) {
     if(messageList.isEmpty()) {
         Column(
             modifier = modifier.fillMaxSize(),
@@ -141,8 +142,8 @@ fun MessageList(modifier: Modifier = Modifier, messageList : List<MessageModel>)
 }
 
 @Composable
-fun MessageRow(messageModel: MessageModel) {
-    val isUser = messageModel.role=="user"
+fun MessageRow(messageModel: ChatMessage) {
+    val isUser = messageModel.role == Role.USER
 
     Row(
         verticalAlignment = Alignment.CenterVertically
@@ -164,7 +165,7 @@ fun MessageRow(messageModel: MessageModel) {
                     .padding(16.dp)
             ) {
                 SelectionContainer() {
-                    Text(text = messageModel.message, fontWeight = FontWeight.W500)
+                    Text(text = messageModel.content, fontWeight = FontWeight.W500)
                 }
             }
         }
