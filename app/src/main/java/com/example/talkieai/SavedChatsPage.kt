@@ -11,6 +11,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,8 +27,8 @@ fun SavedChatsPage(
     onBackClick: () -> Unit,
     onChatClick: (ChatConversation) -> Unit
 ) {
-
-    val chats = viewModel.savedChats
+    // Correctly observing the StateFlow from the ViewModel
+    val chats by viewModel.savedChats.collectAsState()
 
     Column(modifier = Modifier.fillMaxSize()) {
         AppHeader(onBackClick = onBackClick)
@@ -36,23 +38,23 @@ fun SavedChatsPage(
                 contentAlignment = Alignment.Center) {
                 Text("No saved conversations.", color = Color.Black)
             }
-            return
-        }
-
-        LazyColumn {
-            items(chats) { chat ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .clickable { onChatClick(chat) }
-                ) {
-                    Column(modifier = Modifier.padding(12.dp)) {
-                        Text(chat.title, color = Color.Black)
-                        Text(
-                            text = chat.messages.lastOrNull()?.content ?: "",
-                            maxLines = 1
-                        )
+        } else {
+            LazyColumn {
+                items(chats) { chat ->
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clickable { onChatClick(chat) }
+                    ) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            Text(chat.title, color = Color.Black)
+                            Text(
+                                text = chat.messages.lastOrNull()?.content ?: "Empty conversation",
+                                maxLines = 1,
+                                color = Color.Gray
+                            )
+                        }
                     }
                 }
             }
