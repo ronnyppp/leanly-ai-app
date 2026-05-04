@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.talkieai.app-mergeDebugResources-48:/values-v29/values-v29.xml",
+            "outputFile": "com.example.talkieai.app-mergeDebugResources-54:/values-v29/values-v29.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\ronie\\.gradle\\caches\\9.1.0\\transforms\\ecca21285b0f7d147c26dcda9ce89927\\workspace\\transformed\\core-splashscreen-1.0.0\\res\\values-v29\\values-v29.xml",
+                    "source": "C:\\Users\\ronie\\.gradle\\caches\\9.1.0\\transforms\\952e07028a6987ca9a35b127fc4b96fa\\workspace\\transformed\\core-splashscreen-1.0.0\\res\\values-v29\\values-v29.xml",
                     "from": {
                         "startLines": "2,7",
                         "startColumns": "4,4",
