@@ -40,7 +40,6 @@ import androidx.compose.runtime.setValue
 fun HomePage(modifier: Modifier = Modifier,
              weightViewModel: WeightViewModel = viewModel(),
              onNavigateToChat: (String) -> Unit,
-             onAddWeightClick: (() -> Unit)? = null,
              onOpenSaved: () -> Unit) {
     val currentTime = LocalTime.now()
     val greeting = when (currentTime.hour) {
