@@ -9,15 +9,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.talkieai.models.ChatConversation
 import com.example.talkieai.models.ChatMessage
+import com.example.talkieai.models.ChatRepository
 import com.example.talkieai.models.Role
+import com.example.talkieai.models.toChatConversation
 import com.google.firebase.Firebase
+import com.google.firebase.ai.Chat
 import com.google.firebase.ai.ai
 import com.google.firebase.ai.type.GenerativeBackend
 import com.google.firebase.ai.type.content
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.util.UUID
 
-class ChatViewModel : ViewModel() {
+class ChatViewModel(
+    private val repository: ChatRepository
+) : ViewModel() {
     private val fitnessPrompt = """
 You are a professional fitness coach AI.
 
@@ -38,21 +46,29 @@ Rules:
             systemInstruction = content { text(fitnessPrompt) }
         )
 
-    private var chat = generativeModel.startChat()
+    // Store separate sessions per chatId to keep conversation context isolated
+    private val sessions = mutableMapOf<String, Chat>()
 
-    var chats by mutableStateOf<Map<String, ChatConversation>>(emptyMap())
+    // Using mutableStateMapOf for better reactivity when messages are added
+    var activeChats = mutableStateMapOf<String, ChatConversation>()
         private set
 
     var currChatId by mutableStateOf<String?>(null)
         private set
 
-    // UI state only
-    private val loadingChats = mutableStateMapOf<String, Boolean>()
-
+    // Observe saved chats from Room using StateFlow
+    val savedChats = repository.getSavedChats()
+        .map { entities ->
+            entities.map { it.toChatConversation() }
+        }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            emptyList()
+        )
 
     fun createChat(prompt: String): String {
         val chatId = UUID.randomUUID().toString()
-
 
         val newChat = ChatConversation(
             id = chatId,
@@ -61,13 +77,12 @@ Rules:
             timestamp = System.currentTimeMillis()
         )
 
-        chats = chats + (chatId to newChat)
+        activeChats[chatId] = newChat
         currChatId = chatId
+        
+        // Start a fresh Gemini session for this chatId
+        sessions[chatId] = generativeModel.startChat()
 
-        // reset Gemini session
-        chat = generativeModel.startChat()
-
-        // if prompt exists → send as first message
         if (prompt.isNotBlank()) {
             sendMessage(chatId, prompt)
         }
@@ -76,66 +91,55 @@ Rules:
     }
 
     fun getMessages(chatId: String): List<ChatMessage> {
-        return chats[chatId]?.messages ?: emptyList()
+        return activeChats[chatId]?.messages ?: emptyList()
     }
-
 
     fun sendMessage(chatId: String, question: String) {
         viewModelScope.launch {
-
-            val chatConvo = chats[chatId] ?: return@launch
-
-            loadingChats[chatId] = true
+            val chatConvo = activeChats[chatId] ?: return@launch
+            val session = sessions[chatId] ?: generativeModel.startChat().also { sessions[chatId] = it }
 
             try {
-                // add user message
-                val updated = chatConvo.messages + ChatMessage(
-                    role = Role.USER,
-                    content = question,
-                    timestamp = System.currentTimeMillis()
-                )
+                // 1. Add user message and temporary "Typing..." AI placeholder
+                val updatedMessages = chatConvo.messages + 
+                    ChatMessage(Role.USER, question, System.currentTimeMillis()) +
+                    ChatMessage(Role.AI, "Typing...", System.currentTimeMillis())
 
-                chats = chats + (chatId to chatConvo.copy(messages = updated))
+                activeChats[chatId] = chatConvo.copy(messages = updatedMessages)
 
-                // AI response
-                val response = chat.sendMessage(question)
+                // 2. Request AI response
+                val response = session.sendMessage(question)
                 val reply = response.text ?: "No response"
 
-                val finalMessages = chats[chatId]!!.messages + ChatMessage(
-                    role = Role.AI,
-                    content = reply,
-                    timestamp = System.currentTimeMillis()
-                )
+                // 3. Replace "Typing..." with actual response
+                val currentMessages = activeChats[chatId]?.messages ?: emptyList()
+                val finalMessages = (if (currentMessages.lastOrNull()?.content == "Typing...") {
+                    currentMessages.dropLast(1)
+                } else {
+                    currentMessages
+                }) + ChatMessage(Role.AI, reply, System.currentTimeMillis())
 
-                chats = chats + (chatId to chats[chatId]!!.copy(messages = finalMessages))
+                activeChats[chatId] = activeChats[chatId]!!.copy(messages = finalMessages)
 
             } catch (e: Exception) {
-
-                val errorMessages = chats[chatId]!!.messages + ChatMessage(
-                    role = Role.AI,
-                    content = "Error: ${e.localizedMessage}",
-                    timestamp = System.currentTimeMillis()
-                )
-
-                chats = chats + (chatId to chats[chatId]!!.copy(messages = errorMessages))
-
+                // Remove indicator on error and show error message
+                val currentMessages = activeChats[chatId]?.messages ?: emptyList()
+                val errorMessages = (if (currentMessages.lastOrNull()?.content == "Typing...") {
+                    currentMessages.dropLast(1)
+                } else {
+                    currentMessages
+                }) + ChatMessage(Role.AI, "Error: ${e.localizedMessage}", System.currentTimeMillis())
+                
+                activeChats[chatId] = activeChats[chatId]!!.copy(messages = errorMessages)
                 Log.e("ChatViewModel", "Error sending message", e)
-
-            } finally {
-                loadingChats[chatId] = false
             }
         }
     }
 
-    var savedChats by mutableStateOf<List<ChatConversation>>(emptyList())
-        private set
-
     fun saveConversation(chatId: String) {
-        val chat = chats[chatId] ?: return
-        savedChats = savedChats + chat
-    }
-
-    fun isLoading(chatId: String): Boolean {
-        return loadingChats[chatId] == true
+        val chat = activeChats[chatId] ?: return
+        viewModelScope.launch {
+            repository.saveChat(chat)
+        }
     }
 }
