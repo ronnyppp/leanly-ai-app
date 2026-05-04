@@ -1,15 +1,16 @@
 # 💬 Leanly AI
 
-A basic chat application built with Kotlin and Jetpack Compose that allows users to message with Gemini AI
-using Firebase AI SDK. The app focuses on simple, real-time chat experience.
+Leanly AI is an AI-powered fitness and wellness tracking Android application built to help users monitor workouts, nutrition, and daily habits while interacting with an intelligent AI coach for personalized guidance and progress insights.
 
 ## ✨ Features
 
-- Chat with Gemini AI in real time
+- AI fitness coach powered by Gemini API for real-time conversations about workouts, nutrition, and wellness
+  
+- Offline support with persistent storage of users weight progress and conversations with Leanly AI coach
 
-- Built using Jetpack Compose
+- Clean and responsive UI built with Jetpack Compose
 
-- Clean and minimal UI
+- Structured and scalable architecture using MVVM
 
 ## 📸 Images
 <p>
@@ -21,9 +22,9 @@ using Firebase AI SDK. The app focuses on simple, real-time chat experience.
 
 ## Clone the repo
 
-git clone https://github.com/ronnyppp/talkie-ai-app.git
+git clone https://github.com/ronnyppp/leanly-ai-app.git
 
-cd talkie-ai-app
+cd leanly-ai-app
 
 ## Firebase Setup
 
