@@ -40,7 +40,7 @@ public class LeanlyDao_Impl(
       protected override fun bind(statement: SQLiteStatement, entity: WeightEntry) {
         statement.bindLong(1, entity.id.toLong())
         statement.bindDouble(2, entity.weight.toDouble())
-        statement.bindText(3, entity.date)
+        statement.bindLong(3, entity.date)
       }
     }
     this.__insertAdapterOfStreakEntity = object : EntityInsertAdapter<StreakEntity>() {
@@ -80,8 +80,8 @@ public class LeanlyDao_Impl(
           _tmpId = _stmt.getLong(_columnIndexOfId).toInt()
           val _tmpWeight: Float
           _tmpWeight = _stmt.getDouble(_columnIndexOfWeight).toFloat()
-          val _tmpDate: String
-          _tmpDate = _stmt.getText(_columnIndexOfDate)
+          val _tmpDate: Long
+          _tmpDate = _stmt.getLong(_columnIndexOfDate)
           _item = WeightEntry(_tmpId,_tmpWeight,_tmpDate)
           _result.add(_item)
         }

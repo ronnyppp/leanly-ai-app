@@ -33,6 +33,8 @@ fun AddWeightDialog(
             Button(onClick = {
                 input.toFloatOrNull()?.let {
                     onConfirm(it)
+                    input = ""
+                    onDismiss()
                 }
             }) {
                 Text("Save", color = Color.Black)

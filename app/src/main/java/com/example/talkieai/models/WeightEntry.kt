@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class WeightEntry(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val weight: Float,
-    val date: String
+    val date: Long
 )

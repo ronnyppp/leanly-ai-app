@@ -24,14 +24,14 @@ class WeightViewModel(application: Application) : AndroidViewModel(application){
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     val streak = dao.getAllStreakEntries()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     fun addWeight(weight: Float) {
         viewModelScope.launch {
             val now = System.currentTimeMillis()
 
             dao.insertWeightEntry(
-                WeightEntry(weight = weight, date = now.toString())
+                WeightEntry(weight = weight, date = now)
             )
             updateStreak(now)
         }

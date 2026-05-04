@@ -165,6 +165,7 @@ fun HomePage(modifier: Modifier = Modifier,
             },
             onConfirm = { weight ->
                 weightViewModel.addWeight(weight)
+                showWeightDialog = false
             }
         )
     }

@@ -12,7 +12,7 @@ import com.example.talkieai.models.ChatEntity
     entities = [WeightEntry::class,
         StreakEntity::class,
         ChatEntity::class],
-    version = 2
+    version = 3
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun dao(): LeanlyDao
@@ -21,6 +21,7 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
         @Volatile
         private var INSTANCE: AppDatabase? = null
+
 
         fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {

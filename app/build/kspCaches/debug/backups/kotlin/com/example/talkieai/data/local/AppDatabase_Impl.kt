@@ -36,14 +36,14 @@ public class AppDatabase_Impl : AppDatabase() {
   }
 
   protected override fun createOpenDelegate(): RoomOpenDelegate {
-    val _openDelegate: RoomOpenDelegate = object : RoomOpenDelegate(2,
-        "8620d5b53b3a58abdefcedc67f781b95", "d859df7fb2de3ea6c715eb03c7857f86") {
+    val _openDelegate: RoomOpenDelegate = object : RoomOpenDelegate(3,
+        "f6296ca592a284ba5f1d9b8c38ecf050", "e2879fc0d22ce454a1220e2afcaec13c") {
       public override fun createAllTables(connection: SQLiteConnection) {
-        connection.execSQL("CREATE TABLE IF NOT EXISTS `weight_entries` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `weight` REAL NOT NULL, `date` TEXT NOT NULL)")
+        connection.execSQL("CREATE TABLE IF NOT EXISTS `weight_entries` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `weight` REAL NOT NULL, `date` INTEGER NOT NULL)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS `streak` (`id` INTEGER NOT NULL, `currentStreak` INTEGER NOT NULL, `lastActiveDate` INTEGER NOT NULL, PRIMARY KEY(`id`))")
         connection.execSQL("CREATE TABLE IF NOT EXISTS `chats` (`id` TEXT NOT NULL, `title` TEXT NOT NULL, `messagesJson` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, PRIMARY KEY(`id`))")
         connection.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)")
-        connection.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8620d5b53b3a58abdefcedc67f781b95')")
+        connection.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f6296ca592a284ba5f1d9b8c38ecf050')")
       }
 
       public override fun dropAllTables(connection: SQLiteConnection) {
@@ -73,7 +73,7 @@ public class AppDatabase_Impl : AppDatabase() {
             TableInfo.CREATED_FROM_ENTITY))
         _columnsWeightEntries.put("weight", TableInfo.Column("weight", "REAL", true, 0, null,
             TableInfo.CREATED_FROM_ENTITY))
-        _columnsWeightEntries.put("date", TableInfo.Column("date", "TEXT", true, 0, null,
+        _columnsWeightEntries.put("date", TableInfo.Column("date", "INTEGER", true, 0, null,
             TableInfo.CREATED_FROM_ENTITY))
         val _foreignKeysWeightEntries: MutableSet<TableInfo.ForeignKey> = mutableSetOf()
         val _indicesWeightEntries: MutableSet<TableInfo.Index> = mutableSetOf()
