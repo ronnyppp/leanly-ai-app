@@ -16,29 +16,41 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.talkieai.data.local.AppDatabase
+import com.example.talkieai.models.ChatRepository
 import com.example.talkieai.models.ScreenModel
 import com.example.talkieai.ui.theme.TalkieAITheme
 import com.example.talkieai.viewmodels.ChatViewModel
+import kotlin.collections.get
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val chatViewModel = ViewModelProvider(this)[ChatViewModel::class.java]
+
+        val database = AppDatabase.getDatabase(this)
+        val repository = ChatRepository(database.chatDao())
+
+        val viewModel: ChatViewModel = ViewModelProvider(
+            this,
+            ChatViewModelFactory(repository)
+        )[ChatViewModel::class.java]
+
         setContent {
             TalkieAITheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     containerColor = MaterialTheme.colorScheme.primary
                 ) {innerPadding ->
-                    App(modifier = Modifier.padding(innerPadding), chatViewModel)
+                    App(modifier = Modifier.padding(innerPadding), viewModel)
                 }
             }
         }
@@ -99,5 +111,14 @@ fun App(modifier: Modifier = Modifier, viewModel: ChatViewModel) {
                 },
             )
         }
+    }
+}
+
+class ChatViewModelFactory(
+    private val repository: ChatRepository
+) : ViewModelProvider.Factory {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return ChatViewModel(repository) as T
     }
 }
