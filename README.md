@@ -22,6 +22,10 @@ Leanly AI is an AI-powered fitness and wellness tracking Android application bui
 
 </p>
 
+## Credits 
+
+active PNG Designed By  from https://pngtree.com/freepng/gym-logo-fitness-vector-logo-design-template-design-for-gym-and-fitness-vector_5276081.html?sol=downref&id=bef
+
 # 🚀 Running the project
 
 ## Clone the repo
