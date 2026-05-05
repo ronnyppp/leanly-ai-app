@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -63,18 +64,20 @@ fun HomePage(modifier: Modifier = Modifier,
             .background(MaterialTheme.colorScheme.secondary)
     ) {
         AppHeader()
-        Row(modifier = Modifier.fillMaxWidth().padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Column {
                 Text(
                     greeting,
                     fontSize = 25.sp,
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f),
+                    color = Color.Black,
                     modifier = Modifier.padding(16.dp)
                 )
                 Text(
                     formattedDate,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                    color = Color.Black,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
@@ -88,10 +91,9 @@ fun HomePage(modifier: Modifier = Modifier,
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             modifier = Modifier
+                .weight(1f)
                 .fillMaxWidth()
                 .padding(8.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             item {
                 HomeActionCard(
@@ -102,7 +104,7 @@ fun HomePage(modifier: Modifier = Modifier,
             }
             item {
                 HomeActionCard(
-                    "Generate Workout",
+                    "Workout Ideas",
                     "Beginner friendly workouts",
                     onClick = { onNavigateToChat("Give me a workout for beginners") }
                 )
@@ -122,39 +124,37 @@ fun HomePage(modifier: Modifier = Modifier,
                 )
             }
         }
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row {
-                ElevatedButton(
-                    modifier = Modifier.padding(8.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = Color.Black
-                    ),
-                    elevation = ButtonDefaults.elevatedButtonElevation(
-                        defaultElevation = 6.dp,
-                    ),
-                    onClick = {
-                        onOpenSaved()
-                    },
-                ) {
-                    Text("Saved Chats", color = Color.Black)
-                }
-                ElevatedButton(modifier = Modifier.padding(8.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = Color.Black
-                    ),
-                    elevation = ButtonDefaults.elevatedButtonElevation(
-                        defaultElevation = 6.dp,
-                    ),
-                    onClick = {
-                        showWeightDialog = true
-                    }) {
-                    Text("Add Weight", color = Color.Black)
-                }
+            ElevatedButton(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(56.dp),
+                colors = ButtonDefaults.elevatedButtonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = Color.Black
+                ),
+                onClick = { onOpenSaved() }
+            ) {
+                Text("Saved Chats")
+            }
+
+            ElevatedButton(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(56.dp),
+                colors = ButtonDefaults.elevatedButtonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = Color.Black
+                ),
+                onClick = { showWeightDialog = true }
+            ) {
+                Text("Add Weight")
             }
         }
     }

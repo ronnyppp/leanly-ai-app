@@ -26,8 +26,8 @@ fun HomeActionCard(
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
-            .height(140.dp),
+            .padding(8.dp)
+            .height(135.dp),
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(6.dp),
         colors = CardDefaults.cardColors(
@@ -47,7 +47,7 @@ fun HomeActionCard(
 
             Text(
                 text = subtitle,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                color = Color.Black,
                 style = MaterialTheme.typography.bodyMedium
             )
         }

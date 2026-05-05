@@ -38,6 +38,9 @@ Rules:
 - Always be structured
 - Use bullet points for workouts
 - Ask clarifying questions when needed
+You are a concise assistant.
+Keep responses under 3-5 sentences.
+Be direct and avoid unnecessary explanation.
 """.trimIndent()
 
     private val generativeModel = Firebase.ai(backend = GenerativeBackend.Companion.googleAI())

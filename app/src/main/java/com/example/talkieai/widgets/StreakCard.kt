@@ -24,7 +24,7 @@ fun StreakCard(streak: Int) {
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(6.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.onPrimary
+            containerColor = MaterialTheme.colorScheme.primary
         )
     ) {
         Column(
@@ -46,7 +46,7 @@ fun StreakCard(streak: Int) {
                 Text(
                     text = "Day Streak",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    color = Color.LightGray
                 )
             }
         }

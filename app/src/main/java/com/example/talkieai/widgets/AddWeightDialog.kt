@@ -20,13 +20,24 @@ fun AddWeightDialog(
     var input by remember { mutableStateOf("") }
 
     AlertDialog(
+        containerColor = Color.White,
         onDismissRequest = onDismiss,
-        title = { Text("Add Weight") },
+        title = { Text("Add Weight", color = Color.Black) },
         text = {
             TextField(
                 value = input,
                 onValueChange = { input = it }, // MUST be String
-                placeholder = { Text("Enter weight (lbs)") }
+                placeholder = { Text("Enter weight (lbs)", color = Color.Black) },
+                colors = androidx.compose.material3.TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    disabledContainerColor = Color.White,
+
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+
+                    cursorColor = Color.Black
+                )
             )
         },
         confirmButton = {

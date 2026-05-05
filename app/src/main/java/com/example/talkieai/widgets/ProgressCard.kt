@@ -43,7 +43,7 @@ fun ProgressCard(
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(6.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.onPrimary
+            containerColor = MaterialTheme.colorScheme.primary
         )
     ) {
 
@@ -51,7 +51,7 @@ fun ProgressCard(
             Text(
                 "\uD83D\uDCAA Today’s Progress",
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = Color.Black
             )
             Spacer(modifier = Modifier.height(12.dp))
             Row(
@@ -60,10 +60,10 @@ fun ProgressCard(
             ) {
                 // LEFT: Weight
                 Column {
-                    Text("⚖️ Weight", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text("⚖️ Weight", color = Color.Black)
                     Text(
                         text = currWeight?.let { "$it lbs" } ?: "--",
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = Color.Black,
                         style = MaterialTheme.typography.titleLarge
                     )
                 }
@@ -73,15 +73,15 @@ fun ProgressCard(
                 ) {
                     Text(
                         "Calories: $calories / $calorieGoal",
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = Color.Black
                     )
                     Text(
                         "Workouts: $workoutsDone / $workoutGoal",
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = Color.Black
                     )
                     Text(
                         "Steps: $steps",
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = Color.Black
                     )
                 }
             }

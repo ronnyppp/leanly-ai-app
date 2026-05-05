@@ -88,8 +88,8 @@ fun MessageInput(onMessageSend : (String)-> Unit, initialText: String = "") {
                 message = it
             },
             colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.onPrimary,
-                unfocusedContainerColor = MaterialTheme.colorScheme.onPrimary,
+                focusedContainerColor = MaterialTheme.colorScheme.primary,
+                unfocusedContainerColor = MaterialTheme.colorScheme.primary,
             )
         )
         IconButton(onClick = {
@@ -162,7 +162,8 @@ fun MessageRow(messageModel: ChatMessage) {
                     .padding(16.dp)
             ) {
                 SelectionContainer() {
-                    Text(text = messageModel.content, fontWeight = FontWeight.W500)
+                    Text(text = messageModel.content, color = Color.White,
+                        fontWeight = FontWeight.W500)
                 }
             }
         }
