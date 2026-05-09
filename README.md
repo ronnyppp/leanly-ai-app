@@ -34,26 +34,6 @@ git clone https://github.com/ronnyppp/leanly-ai-app.git
 
 cd leanly-ai-app
 
-## Firebase Setup
-
-Go to [Firebase Console\(https://console.firebase.google.com)
-
-Create a project
-
-Register Android App (use com.example.talkieai for package name)
-
-Download google-services.json
-
-Place google-services.json inside of app folder
-
-Go to AI Services then AI Logic
-
-Click get started and choose Gemini Developer API
-
-Enable API
-
-Follow instructions in Firebase AI Logic to add SDK (if necesarry)
-
 ## Run the app
 
 In terminal of IDE:
