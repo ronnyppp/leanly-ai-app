@@ -36,8 +36,6 @@ cd leanly-ai-app
 
 ## Run the app
 
-In terminal of IDE:
+Open project in Android Studio
 
-flutter pub get
-
-flutter run
+Run project with emulator
