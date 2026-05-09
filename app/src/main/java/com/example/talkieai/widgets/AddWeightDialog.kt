@@ -26,7 +26,7 @@ fun AddWeightDialog(
         text = {
             TextField(
                 value = input,
-                onValueChange = { input = it }, // MUST be String
+                onValueChange = { input = it },
                 placeholder = { Text("Enter weight (lbs)", color = Color.Black) },
                 colors = androidx.compose.material3.TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,

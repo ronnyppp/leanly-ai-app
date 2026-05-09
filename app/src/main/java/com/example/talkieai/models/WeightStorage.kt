@@ -10,6 +10,7 @@ object WeightStorage {
 
     private val gson = Gson()
 
+    // save weight list as Json in shared preferences
     fun saveWeights(context: Context, list: List<WeightEntry>) {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
@@ -19,7 +20,7 @@ object WeightStorage {
             .putString(KEY, json)
             .apply()
     }
-
+    // load weight list
     fun loadWeights(context: Context): MutableList<WeightEntry> {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 

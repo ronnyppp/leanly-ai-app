@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 class ChatRepository(private val dao: ChatDao) {
 
+    // save chat to dao
     suspend fun saveChat(chat: ChatConversation) {
         dao.insertChat(
             ChatEntity(
@@ -16,6 +17,6 @@ class ChatRepository(private val dao: ChatDao) {
             )
         )
     }
-
+    // get saved chats from dao
     fun getSavedChats(): Flow<List<ChatEntity>> = dao.getAllChats()
 }

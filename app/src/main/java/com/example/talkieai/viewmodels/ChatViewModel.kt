@@ -26,6 +26,7 @@ import java.util.UUID
 class ChatViewModel(
     private val repository: ChatRepository
 ) : ViewModel() {
+    // initial prompt
     private val fitnessPrompt = """
 You are a professional fitness coach AI.
 
@@ -49,10 +50,10 @@ Be direct and avoid unnecessary explanation.
             systemInstruction = content { text(fitnessPrompt) }
         )
 
-    // Store separate sessions per chatId to keep conversation context isolated
+    // store separate sessions per chatId to keep conversation context isolated
     private val sessions = mutableMapOf<String, Chat>()
 
-    // Using mutableStateMapOf for better reactivity when messages are added
+    // using mutableStateMapOf for better reactivity when messages are added
     var activeChats = mutableStateMapOf<String, ChatConversation>()
         private set
 
@@ -103,18 +104,18 @@ Be direct and avoid unnecessary explanation.
             val session = sessions[chatId] ?: generativeModel.startChat().also { sessions[chatId] = it }
 
             try {
-                // 1. Add user message and temporary "Typing..." AI placeholder
+                // add user message and temporary "Typing..." AI placeholder
                 val updatedMessages = chatConvo.messages + 
                     ChatMessage(Role.USER, question, System.currentTimeMillis()) +
                     ChatMessage(Role.AI, "Typing...", System.currentTimeMillis())
 
                 activeChats[chatId] = chatConvo.copy(messages = updatedMessages)
 
-                // 2. Request AI response
+                // request AI response
                 val response = session.sendMessage(question)
                 val reply = response.text ?: "No response"
 
-                // 3. Replace "Typing..." with actual response
+                // replace "Typing..." with response
                 val currentMessages = activeChats[chatId]?.messages ?: emptyList()
                 val finalMessages = (if (currentMessages.lastOrNull()?.content == "Typing...") {
                     currentMessages.dropLast(1)
@@ -125,7 +126,7 @@ Be direct and avoid unnecessary explanation.
                 activeChats[chatId] = activeChats[chatId]!!.copy(messages = finalMessages)
 
             } catch (e: Exception) {
-                // Remove indicator on error and show error message
+                // remove temporary indicator on error and show error message
                 val currentMessages = activeChats[chatId]?.messages ?: emptyList()
                 val errorMessages = (if (currentMessages.lastOrNull()?.content == "Typing...") {
                     currentMessages.dropLast(1)

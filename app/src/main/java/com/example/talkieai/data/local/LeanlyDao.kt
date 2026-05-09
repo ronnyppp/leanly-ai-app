@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface LeanlyDao {
-
+    // funs for weight tracking
     @Insert
     suspend fun insertWeightEntry(entry: WeightEntry)
 

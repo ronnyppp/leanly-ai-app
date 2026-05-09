@@ -13,6 +13,7 @@ data class ChatEntity(
 )
 
 fun ChatEntity.toChatConversation(): ChatConversation {
+    // parse messagesJson to List<ChatMessage>
     val messages = try {
         if (messagesJson.isBlank()) {
             emptyList<ChatMessage>()

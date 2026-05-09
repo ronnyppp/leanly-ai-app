@@ -42,6 +42,7 @@ fun HomePage(modifier: Modifier = Modifier,
              weightViewModel: WeightViewModel = viewModel(),
              onNavigateToChat: (String) -> Unit,
              onOpenSaved: () -> Unit) {
+    // configure greeting based on time/day
     val currentTime = LocalTime.now()
     val greeting = when (currentTime.hour) {
         in 5..11 -> "Good morning ☀️"
@@ -52,7 +53,7 @@ fun HomePage(modifier: Modifier = Modifier,
     val formattedDate = currentDate.format(
         DateTimeFormatter.ofPattern("MMMM d, yyyy")
     )
-
+    // get weight and streak data from view model
     val weights by weightViewModel.weights.collectAsState()
     val streakData by weightViewModel.streak.collectAsState()
 
@@ -95,6 +96,7 @@ fun HomePage(modifier: Modifier = Modifier,
                 .fillMaxWidth()
                 .padding(8.dp),
         ) {
+            // no prompt
             item {
                 HomeActionCard(
                     "Chat with LeanlyAI",
@@ -102,6 +104,7 @@ fun HomePage(modifier: Modifier = Modifier,
                     onClick = { onNavigateToChat("") }
                 )
             }
+            // pass prompts to ai for each card
             item {
                 HomeActionCard(
                     "Workout Ideas",
@@ -158,6 +161,7 @@ fun HomePage(modifier: Modifier = Modifier,
             }
         }
     }
+    // show weight dialog when button is clicked
     if (showWeightDialog) {
         AddWeightDialog(
             onDismiss = {

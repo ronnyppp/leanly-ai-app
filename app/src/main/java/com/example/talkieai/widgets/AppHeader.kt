@@ -30,6 +30,7 @@ fun AppHeader(onBackClick: (() -> Unit)? = null,
             .background(MaterialTheme.colorScheme.primary)
             .padding(10.dp)
     ) {
+        // add back button if necesarry
         if (onBackClick != null) {
             IconButton(onClick = onBackClick) {
                 Icon(
@@ -39,6 +40,7 @@ fun AppHeader(onBackClick: (() -> Unit)? = null,
                 )
             }
         }
+        // add save chat if necesarry
         if(onSaveChatClick != null) {
             IconButton(
                 modifier = Modifier.align(Alignment.CenterEnd),

@@ -7,6 +7,7 @@ object DatabaseProvider {
 
     private var INSTANCE: AppDatabase? = null
 
+    // get database instance
     fun getDatabase(context: Context): AppDatabase {
         return INSTANCE ?: synchronized(this) {
             val instance = Room.databaseBuilder(
@@ -14,7 +15,7 @@ object DatabaseProvider {
                 AppDatabase::class.java,
                 "fitness_db"
             )
-                .fallbackToDestructiveMigration()
+                .fallbackToDestructiveMigration(false)
                 .build()
             INSTANCE = instance
             instance

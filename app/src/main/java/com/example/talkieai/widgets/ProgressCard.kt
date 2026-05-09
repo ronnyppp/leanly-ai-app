@@ -30,6 +30,7 @@ fun ProgressCard(
     val currWeight = weights.firstOrNull()?.weight
     val prevWeight = weights.drop(1).firstOrNull()?.weight
 
+    // calc weight change
     val weightChange = if (currWeight != null && prevWeight != null) {
         currWeight - prevWeight
     } else {
@@ -58,7 +59,7 @@ fun ProgressCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                // LEFT: Weight
+                // left: Weight
                 Column {
                     Text("⚖️ Weight", color = Color.Black)
                     Text(
@@ -67,7 +68,7 @@ fun ProgressCard(
                         style = MaterialTheme.typography.titleLarge
                     )
                 }
-                // RIGHT: Stats
+                // right: Stats
                 Column(
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
@@ -86,6 +87,7 @@ fun ProgressCard(
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))
+            // show weight difference/progress
             weightChange?.let {
                 Text(
                     text = if (it >= 0)

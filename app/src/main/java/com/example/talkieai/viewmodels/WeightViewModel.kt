@@ -37,6 +37,7 @@ class WeightViewModel(application: Application) : AndroidViewModel(application){
         }
     }
 
+    // update streak based on last active date
     private suspend fun updateStreak(now: Long) {
         val curr = streak.value
 
