@@ -37,6 +37,6 @@ cd leanly-ai-app
 
 ## Run the app
 
-Open project in Android Studio
+Open project in Android Studio or VSCode.
 
-Run project with emulator
+Run project with emulator or physical device.
