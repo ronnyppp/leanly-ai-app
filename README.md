@@ -30,9 +30,10 @@ active PNG Designed By  from https://pngtree.com/freepng/gym-logo-fitness-vector
 
 ## Clone the repo
 
+```bash
 git clone https://github.com/ronnyppp/leanly-ai-app.git
-
 cd leanly-ai-app
+```
 
 ## Run the app
 
